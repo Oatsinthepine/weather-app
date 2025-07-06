@@ -1,0 +1,18 @@
+# --- Python backend ---
+weather_app_backend/__pycache__/
+weather_app_backend/.env
+weather_app_backend/.venv/
+weather_app_backend/database.db
+weather_app_backend/*.sqlite
+
+# --- Node/React frontend ---
+weather_app_frontend/node_modules/
+weather_app_frontend/.env
+weather_app_frontend/dist/
+weather_app_frontend/.next/
+
+# --- General ---
+*.pyc
+.DS_Store
+.env
+.idea/
