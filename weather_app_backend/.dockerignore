@@ -1,0 +1,19 @@
+# Ignore Python cache and compiled files
+__pycache__/
+*.pyo
+*.pyd
+
+# Ignore virtual environments
+.venv/
+env/
+venv/
+
+# Ignore environment variable files (secrets!)
+.env
+
+# Ignore test data, db, and misc files
+*.sqlite
+database.db
+
+# Ignore OS-specific files
+.DS_Store
