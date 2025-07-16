@@ -38,3 +38,18 @@
     - **Stop** : `docker stop weather-backend`
     - **Restart** `docker start weather-backend`
     - **see logs** `docker logs weather-backend `
+
+
+## Using compose.yaml to Orchestrate Backend and Frontend
+
+After creating a Dockerfile for both the frontend and backend, we use Docker Compose (via a compose.yaml file) to build images and start containers for both services together with a single command.
+
+This has several benefits:
+
+	•	Simplifies startup: Don’t need to run docker run separately for each service. Instead, you run `docker compose up --build` and both backend and frontend are built, networked, and started automatically.
+
+	•	Service orchestration: Compose manages networking between services. The backend and frontend can easily communicate on a shared Docker network, using service names like backend or frontend as hostnames.
+
+	•	Environment management: Compose lets you pass environment variables, mount volumes, or set ports for each service in one place.
+
+	•	Reproducibility: Anyone can clone the project and spin up the entire stack with one command, ensuring consistency across different machines and environments.
