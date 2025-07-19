@@ -4,11 +4,12 @@
 # If you need more help, visit the Dockerfile reference guide at
 # https://docs.docker.com/go/dockerfile-reference/
 
-# Want to help us make this template better? Share your feedback here: https://forms.gle/ybq9Krt8jtBL3iCk7
+
+################################################################################
+# 1: Building stage: establish the base image and set up the working directory.
 
 ARG NODE_VERSION=24.1.0
 
-################################################################################
 # Use node image for base image for all stages.
 FROM node:${NODE_VERSION}-alpine as base
 
@@ -17,7 +18,9 @@ WORKDIR /usr/src/app
 
 
 ################################################################################
-# Create a stage for installing production dependecies.
+# 2: deps stage: install production dependencies.
+
+# Create the deps stage for installing production dependecies.
 FROM base as deps
 
 # Download dependencies as a separate step to take advantage of Docker's caching.
@@ -30,7 +33,9 @@ RUN --mount=type=bind,source=package.json,target=package.json \
     npm ci --omit=dev
 
 ################################################################################
-# Create a stage for building the application.
+# 3: build stage: install dev dependencies and builds the application.
+
+# Create build stage for building the application.
 FROM deps as build
 
 # Download additional development dependencies before building, as some projects require
@@ -42,12 +47,13 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 
 # Copy the rest of the source files into the image.
 COPY . .
-# Run the build script.
+# This compiles all the scripts into dist/ folder ready for production.
 RUN npm run build
 
 ################################################################################
-# Create a new stage to run the application with minimal runtime dependencies
-# where the necessary files are copied from the build stage.
+# 4: final stage: uses minimal runtime (no dev tooling), copies dist/output, serves via npx serve.
+
+# Create the final stage to run the application with minimal runtime dependencies where the necessary files are copied from the build stage.
 FROM base as final
 
 # Use production node environment by default.
@@ -68,5 +74,5 @@ COPY --from=build /usr/src/app/dist ./dist
 # Expose the port that the application listens on.
 EXPOSE 5173
 
-# Run the application.
+# Run the application in production mode.
 CMD npx serve -s dist -l 5173
